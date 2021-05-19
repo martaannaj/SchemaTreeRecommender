@@ -1,17 +1,17 @@
 package main
 
 import (
+	"SchemaTreeRecommender/configuration"
+	"SchemaTreeRecommender/glossary"
+	"SchemaTreeRecommender/preparation"
+	"SchemaTreeRecommender/schematree"
+	"SchemaTreeRecommender/server"
+	"SchemaTreeRecommender/strategy"
 	"bufio"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"recommender/configuration"
-	"recommender/glossary"
-	"recommender/preparation"
-	"recommender/schematree"
-	"recommender/server"
-	"recommender/strategy"
 	"time"
 
 	"runtime"
