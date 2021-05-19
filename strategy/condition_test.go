@@ -1,8 +1,8 @@
 package strategy
 
 import (
-	"recommender/assessment"
-	"recommender/schematree"
+	"SchemaTreeRecommender/assessment"
+	"SchemaTreeRecommender/schematree"
 	"testing"
 )
 

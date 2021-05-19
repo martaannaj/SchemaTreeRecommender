@@ -3,9 +3,9 @@ package strategy
 // This file is responsible for holding presets for strategy definitions.
 
 import (
-	"recommender/assessment"
-	"recommender/backoff"
-	"recommender/schematree"
+	"SchemaTreeRecommender/assessment"
+	"SchemaTreeRecommender/backoff"
+	"SchemaTreeRecommender/schematree"
 	"strings"
 )
 

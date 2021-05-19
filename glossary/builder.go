@@ -1,12 +1,12 @@
 package glossary
 
 import (
+	"SchemaTreeRecommender/io"
+	recIO "SchemaTreeRecommender/io"
 	"bytes"
 	"encoding/gob"
 	"fmt"
 	"os"
-	"recommender/io"
-	recIO "recommender/io"
 )
 
 // Key of each glossary entry.

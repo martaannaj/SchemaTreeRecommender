@@ -15,18 +15,11 @@ import (
 )
 
 type evalResult struct {
-	setSize    uint16 // number of properties used to generate recommendations (both type and non-type)
-	numTypes   uint16 // number of type properties in both reduced and leftout property sets
-	numLeftOut uint16 // number of properties that have been left out an needed to be recommended back
-	rank       uint32 // rank calculated for recommendation, equal to lec(recommendations)+1 if not fully recommendated back
-	numTP      uint32 // confusion matrix - number of left out properties that have been recommended
-	numTPAtL   uint32 // number of left out properties that have been recommended until position L, where L is numLeftOut
-	numFP      uint32 // confusion matrix - number of recommendations that have not been left out
-	numTN      uint32 // confusion matrix - number of properties that have neither been recommended or left out
-	numFN      uint32 // confusion matrix - number of properties that are left out but have not been recommended
-	duration   int64  // duration (in nanoseconds) of how long the recommendation took
-	group      uint16 // extra value that can store values like custom-made groups
-	note       string // @TODO: Temporarily added to aid in evaluation debugging
+	setSize  uint16 // number of properties used to generate recommendations (both type and non-type)
+	numTypes uint16 // number of type properties in both reduced and leftout property sets
+	duration int64  // duration (in nanoseconds) of how long the recommendation took
+	group    uint16 // extra value that can store values like custom-made groups
+	note     string // @TODO: Temporarily added to aid in evaluation debugging
 }
 
 // evaluatePair will generate an evalResult for a pair of ( reducedProps , leftoutProps ).
@@ -40,7 +33,6 @@ func evaluatePair(
 	tree *schematree.SchemaTree,
 	workflow *strategy.Workflow,
 	reducedProps schematree.IList,
-	leftoutProps schematree.IList,
 ) *evalResult {
 
 	// Evaluator will not generate stats if no properties exist to make a recommendation.
@@ -68,96 +60,12 @@ func evaluatePair(
 			numTypeProps++
 		}
 	}
-	for _, lop := range leftoutProps {
-		if lop.IsType() {
-			numTypeProps++
-		}
-	}
-
-	// Iterate through the list of left out properties to detect matching recommendations.
-	// var maxMatchIndex = 0 // indexes always start at zero
-	var numTP, numFP, numFN, numTN, numTPAtL uint32
-	// for _, lop := range leftoutProps {
-
-	// 	// First go through all recommendations and see if a matching property was found.
-	// 	var matchFound bool
-	// 	var matchIndex int
-	// 	for i, rec := range recs {
-	// 		if rec.Property == lop { // @todo: check if same pointers
-	// 			matchFound = true
-	// 			matchIndex = i
-	// 			break
-	// 		}
-	// 	}
-
-	// 	// If the current left-out property has a matching recommendation.
-	// 	// Calculating the maxMatchIndex helps in the future to calculate the rank.
-	// 	if matchFound {
-	// 		numTP++                             // in practice this is also the number of matches
-	// 		if matchIndex < len(leftoutProps) { // keep track
-	// 			numTPAtL++
-	// 		}
-	// 		if matchIndex > maxMatchIndex { // keep track of max for later
-	// 			maxMatchIndex = matchIndex
-	// 		}
-	// 	}
-
-	// 	// If the current left-out property does not have a matching recommendation.
-	// 	if !matchFound {
-	// 		numFN++
-	// 	}
-	// }
-	matchFound := false
-	rank := uint32(500)
-	for i, rec := range recs {
-		for _, lop := range leftoutProps {
-			if rec.Property == lop {
-				numTP++                    // in practice this is also the number of matches
-				if i < len(leftoutProps) { // keep track
-					numTPAtL++
-				}
-				if !matchFound { // only record the rank of the first correct recommendation
-					rank = uint32(i) + 1
-					matchFound = true
-				}
-				break
-			}
-		}
-	}
-	numFN = uint32(len(leftoutProps)) - numTP // number of not recovered properties
-	numFP = uint32(len(recs)) - numTP         // number of Recommended but not relevant properties
-	numTN = uint32(len(tree.PropMap)) - numTP - numFN - numFP
-
-	// Calculate the rank: the number of non-left out properties that were given before
-	// all left-out properties are recommended, plus 1.
-	// When all recommendation have been found, we can derive by taking the maximal index
-	// of all matches and using the number of matches to find out how many non-matching
-	// recommendations exists until that maximal match index.
-	// If not recommendations were found, we add a penalizing number.
-	// var rank uint32
-	// if numTP == uint32(len(leftoutProps)) {
-	// 	rank = uint32(maxMatchIndex + 1 - len(leftoutProps) + 1) // +1 for index, +1 because best is 1
-	// } else {
-	// 	// The rank could also be set to = uint32(len(recs) + 1)
-	// 	// That would make it dependent on number of recommendations. Problem is, when the
-	// 	// recommender returns a small number of recommendations, then the rank is small
-	// 	// as well.
-	// 	// Or maybe set it to = uint32(len(tree.propMap) + 1)
-	// 	rank = 10000 // uint32(len(recs) + 1)
-	// }
 
 	// Prepare the full evalResult by deriving some values.
 	result := evalResult{
-		setSize:    uint16(len(reducedProps)),
-		numTypes:   numTypeProps,
-		numLeftOut: uint16(len(leftoutProps)),
-		rank:       rank,
-		numTP:      numTP,
-		numTPAtL:   numTPAtL,
-		numFN:      numFN,
-		numFP:      numFP,
-		numTN:      numTN,
-		duration:   duration,
+		setSize:  uint16(len(reducedProps)),
+		numTypes: numTypeProps,
+		duration: duration,
 	}
 	return &result
 }
@@ -194,23 +102,11 @@ func evaluateDataset(
 
 	// Depending on the evaluation method, we will use a different handler
 	var handler handlerFunc
-	if handlerName == "takeOneButType" { // take one out except type
-		handler = HandlerTakeOneButType
-	} else if handlerName == "takeAllButBest" { // take all best except number of types
-		handler = HandlerTakeAllButBest
-	} else if handlerName == "takeMoreButCommon" { // take iteratively more bust the most common non-type prop
-		handler = HandlerTakeMoreButCommon
-	} else if handlerName == "handlerTakeButType" { // take all but types
-		handler = handlerTakeButType
-	} else if handlerName == "historicTakeButType" { // original workings of take all but types
-		handler = buildHistoricHandlerTakeButType()
-	} else {
-		panic("No suitable handler has been selected.")
-	}
+	handler = handlerAll
 
 	// We also construct the method that will evaluate a pair of property sets.
-	evaluator := func(reduced schematree.IList, leftout schematree.IList) *evalResult {
-		return evaluatePair(tree, workflow, reduced, leftout)
+	evaluator := func(reduced schematree.IList) *evalResult {
+		return evaluatePair(tree, workflow, reduced)
 	}
 
 	// Build the complete callback function for the subject summary reader.

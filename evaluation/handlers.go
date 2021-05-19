@@ -1,7 +1,7 @@
 package main
 
 import (
-	"recommender/schematree"
+	"SchemaTreeRecommender/schematree"
 	"sort"
 	"sync"
 )

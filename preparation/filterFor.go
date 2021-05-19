@@ -3,7 +3,7 @@ package preparation
 import (
 	"bytes"
 
-	recIO "recommender/io"
+	recIO "SchemaTreeRecommender/io"
 )
 
 // FilterForSchematree creates a filtered version of a dataset to make it better for

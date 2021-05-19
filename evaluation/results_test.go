@@ -1,7 +1,7 @@
 package main
 
 import (
-	"recommender/configuration"
+	"SchemaTreeRecommender/configuration"
 	"testing"
 )
 

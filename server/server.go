@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"recommender/assessment"
-	"recommender/glossary"
-	"recommender/schematree"
-	"recommender/strategy"
+	"SchemaTreeRecommender/assessment"
+	"SchemaTreeRecommender/glossary"
+	"SchemaTreeRecommender/schematree"
+	"SchemaTreeRecommender/strategy"
 )
 
 // RecommenderRequest is the data representation of the request input in json.

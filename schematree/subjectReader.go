@@ -7,6 +7,7 @@ I/O and RDF Parsing
 package schematree
 
 import (
+	rio "SchemaTreeRecommender/io"
 	"bufio"
 	"compress/bzip2"
 	"errors"
@@ -16,7 +17,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	rio "recommender/io"
 	"runtime"
 	"strings"
 	"sync"

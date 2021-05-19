@@ -1,14 +1,14 @@
 package main
 
 import (
+	"SchemaTreeRecommender/configuration"
+	recIO "SchemaTreeRecommender/io"
+	"SchemaTreeRecommender/schematree"
+	"SchemaTreeRecommender/strategy"
 	"flag"
 	"fmt"
 	"log"
 	"os"
-	"recommender/configuration"
-	recIO "recommender/io"
-	"recommender/schematree"
-	"recommender/strategy"
 	"runtime"
 	"runtime/pprof"
 	"runtime/trace"

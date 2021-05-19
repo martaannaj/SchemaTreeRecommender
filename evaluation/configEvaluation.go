@@ -1,9 +1,9 @@
 package main
 
 import (
+	"SchemaTreeRecommender/configuration"
+	"SchemaTreeRecommender/schematree"
 	"fmt"
-	"recommender/configuration"
-	"recommender/schematree"
 )
 
 // Run all config files defined in ./configs and create a results csv table in ./

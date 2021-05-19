@@ -1,11 +1,11 @@
 package main
 
 import (
+	"SchemaTreeRecommender/configuration"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"recommender/configuration"
 )
 
 type creater struct {

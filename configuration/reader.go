@@ -1,12 +1,12 @@
 package configuration
 
 import (
+	"SchemaTreeRecommender/backoff"
+	"SchemaTreeRecommender/schematree"
+	"SchemaTreeRecommender/strategy"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"recommender/backoff"
-	"recommender/schematree"
-	"recommender/strategy"
 
 	"github.com/pkg/errors"
 )

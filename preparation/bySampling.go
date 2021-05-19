@@ -12,7 +12,7 @@ import (
 
 	gzip "github.com/klauspost/pgzip"
 
-	recIO "recommender/io"
+	recIO "SchemaTreeRecommender/io"
 )
 
 // SplitBySampling splits a dataset file into two by taking out every Nth entry.

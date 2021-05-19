@@ -1,11 +1,11 @@
 package assessment
 
 import (
+	"SchemaTreeRecommender/schematree"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"recommender/schematree"
 	"strconv"
 	"strings"
 	"time"

@@ -12,8 +12,8 @@ package strategy
 //       assessment - creating it and then only delivering it to the strategy)
 
 import (
-	"recommender/assessment"
-	"recommender/schematree"
+	"SchemaTreeRecommender/assessment"
+	"SchemaTreeRecommender/schematree"
 )
 
 // Condition : Evaluates is a given strategy entry should run.

@@ -3,7 +3,7 @@ package preparation
 import (
 	"bytes"
 
-	recIO "recommender/io"
+	recIO "SchemaTreeRecommender/io"
 )
 
 // SplitByTypeStats are the stats related to the split operation.

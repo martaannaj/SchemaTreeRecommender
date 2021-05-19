@@ -1,7 +1,7 @@
 package backoff
 
 import (
-	ST "recommender/schematree"
+	ST "SchemaTreeRecommender/schematree"
 	"testing"
 )
 
